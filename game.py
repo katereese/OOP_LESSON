@@ -13,10 +13,7 @@ class Star(GameElement):
     SOLID = False
     def interact(self, player):
         if len(player.inventory) >= 5:
-            GAME_BOARD.draw_msg("You lose! You have rescued %d cats and you are a cat hoarder :( "%(len(player.inventory)))
-     #      END THE GAME, delete the board and populate with new image.
-     #      self.board.del_el(self.x, self.y)
-     #      self.board.set_el(next_x, next_y, self) 
+            GAME_BOARD.draw_msg("You lose! You have rescued %d cats and you are a cat hoarder :( You love cats a bit too much!"%(len(player.inventory)))
         if len(player.inventory) < 5:
             GAME_BOARD.draw_msg("You won! You have rescued %d cats and you are not a cat hoarder! You must really love cats!"%(len(player.inventory)))
 
@@ -26,6 +23,11 @@ class Cat(GameElement):
     def interact(self, player):
         player.inventory.append(self)
         GAME_BOARD.draw_msg("You just rescued a cat! You have %d items!"%(len(player.inventory)))
+
+class Win(GameElement):
+    IMAGE = "Heart"
+    SOLID = True
+
 
 class BadGuy(GameElement):
     IMAGE = "Horns"
@@ -82,10 +84,10 @@ class Character(GameElement):
                         existing_el.interact(self)
 
                     if existing_el and existing_el.SOLID:
-                        self.board.draw_msg("There's something in my way!")
+                        self.board.draw_msg("Uh oh, a rock!")
                     elif existing_el is None or not existing_el.SOLID:
                         self.board.del_el(self.x, self.y)
-                        self.board.set_el(next_x, next_y, self) 
+                        self.board.set_el(next_x, next_y, self)     
                 else:
                     print "Whoops, don't run away!"
     
@@ -190,8 +192,14 @@ def initialize():
     GAME_BOARD.register(star)
     GAME_BOARD.set_el(8,8,star)
 
+    for i in range(0, GAME_WIDTH):
+        for j in range(0, GAME_HEIGHT):
+            win = Win()
+            GAME_BOARD.register(win)
+            GAME_BOARD.set_el(i, j, win)
+
     # badguy = BadGuy()
     # GAME_BOARD.register(badguy)
     # GAME_BOARD.set_el(0,5,badguy)
 
-    GAME_BOARD.draw_msg("KITTY GAME.")
+    GAME_BOARD.draw_msg("KITTY GAME!")
