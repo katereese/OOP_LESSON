@@ -12,11 +12,13 @@ class Star(GameElement):
     IMAGE = "Star"
     SOLID = False
     def interact(self, player):
-        player.inventory.append(self)
-        if len(player.inventory) > 10:
-            GAME_BOARD.draw_msg("You lose! You have collected %d cats and you are a cat hoarder!"%(len(player.inventory)))
-        if len(player.inventory) <= 10:
-            GAME_BOARD.draw_msg("You won! You have collected %d cats and you are not a cat hoarder!"%(len(player.inventory)))
+        if len(player.inventory) >= 5:
+            GAME_BOARD.draw_msg("You lose! You have rescued %d cats and you are a cat hoarder :( "%(len(player.inventory)))
+     #      END THE GAME, delete the board and populate with new image.
+     #      self.board.del_el(self.x, self.y)
+     #      self.board.set_el(next_x, next_y, self) 
+        if len(player.inventory) < 5:
+            GAME_BOARD.draw_msg("You won! You have rescued %d cats and you are not a cat hoarder! You must really love cats!"%(len(player.inventory)))
 
 class Cat(GameElement):
     IMAGE = "Cat"
@@ -29,15 +31,16 @@ class BadGuy(GameElement):
     IMAGE = "Horns"
     direction = 1
 
-    def update(self, dt):
-        next_x = self.x + self.direction
-        if next_x < 0 or next_x >= self.board.width:
-            self.direction *= -1
-            next_x = self.x
-        self.board.del_el(self.x, self.y)
-        self.board.set_el(next_x, self.y, self)
-
-   #     if Character
+    # def update(self, dt):
+    #     next_x = self.x + self.direction
+    #     if next_x < 0 or next_x >= self.board.width:
+    #         self.direction *= -1
+    #         next_x = self.x
+    #     self.board.del_el(self.x, self.y)
+    #     self.board.set_el(next_x, self.y, self)
+            
+            # if (next_x, next_y) == Character() (next_x, next_y):
+            #     code from end game
 
 class Character(GameElement):
     IMAGE = "Girl"
@@ -85,12 +88,12 @@ class Character(GameElement):
                         self.board.set_el(next_x, next_y, self) 
                 else:
                     print "Whoops, don't run away!"
-
+    
 
     def __init__(self):
         GameElement.__init__(self)
         self.inventory = []
-
+    
 
 #### DO NOT TOUCH ####
 GAME_BOARD = None
@@ -98,8 +101,8 @@ DEBUG = False
 
 ######################
 
-GAME_WIDTH = 8
-GAME_HEIGHT = 8
+GAME_WIDTH = 9
+GAME_HEIGHT = 9
 
 #### Put class definitions here ####
 pass
@@ -109,13 +112,22 @@ def initialize():
     """Put game initialization code here"""
     
     rock_positions = [
-            (1, 1),
-            (0, 3),
-            (3, 0),
-            (5, 1),
+            (0, 4),
+            (1, 2),
+            (1, 6),
+            (2, 0),
+            (2, 3),
+            (2, 5),
             (3, 7),
-            (5, 7),
-            (6, 2) 
+            (3, 8),
+            (4, 1),
+            (4, 2),
+            (5, 4),
+            (6, 0),
+            (6, 2),
+            (6, 4),
+            (8, 1), 
+            (8, 4)
         ]
 
     rocks = []
@@ -132,13 +144,24 @@ def initialize():
 
     cat_positions = [
             (0,1),
-            (0,2),
+            (0,6),
             (1,0),
-            (2,0),
+            (1,7),
             (2,2),
-            (0,5),
-            (4,4),
-            (1,3)
+            (2,7),
+            (3,4),
+            (4,3),
+            (4,6),
+            (4,8),
+            (5,1),
+            (5,2),
+            (5,5),
+            (6,5),
+            (7,3),
+            (7,8),
+            (8,0),
+            (8,6),
+            (8,7)
         ]
 
     cats = []
@@ -165,10 +188,10 @@ def initialize():
 
     star = Star()
     GAME_BOARD.register(star)
-    GAME_BOARD.set_el(7,7,star)
+    GAME_BOARD.set_el(8,8,star)
 
-    badguy = BadGuy()
-    GAME_BOARD.register(badguy)
-    GAME_BOARD.set_el(0,5,badguy)
+    # badguy = BadGuy()
+    # GAME_BOARD.register(badguy)
+    # GAME_BOARD.set_el(0,5,badguy)
 
-    GAME_BOARD.draw_msg("Cat's are the best.")
+    GAME_BOARD.draw_msg("KITTY GAME.")
