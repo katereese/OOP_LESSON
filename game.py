@@ -8,12 +8,15 @@ class Rock(GameElement):
     IMAGE = "Rock"
     SOLID = True
 
-class Gem(GameElement):
-    IMAGE = "BlueGem"
+class Star(GameElement):
+    IMAGE = "Star"
     SOLID = False
     def interact(self, player):
         player.inventory.append(self)
-        GAME_BOARD.draw_msg("You just aquired a gem! You have %d items!"%(len(player.inventory)))
+        if len(player.inventory) > 10:
+            GAME_BOARD.draw_msg("You lose! You have collected %d cats and you are a cat hoarder!"%(len(player.inventory)))
+        if len(player.inventory) <= 10:
+            GAME_BOARD.draw_msg("You won! You have collected %d cats and you are not a cat hoarder!"%(len(player.inventory)))
 
 class Cat(GameElement):
     IMAGE = "Cat"
@@ -21,6 +24,20 @@ class Cat(GameElement):
     def interact(self, player):
         player.inventory.append(self)
         GAME_BOARD.draw_msg("You just rescued a cat! You have %d items!"%(len(player.inventory)))
+
+class BadGuy(GameElement):
+    IMAGE = "Horns"
+    direction = 1
+
+    def update(self, dt):
+        next_x = self.x + self.direction
+        if next_x < 0 or next_x >= self.board.width:
+            self.direction *= -1
+            next_x = self.x
+        self.board.del_el(self.x, self.y)
+        self.board.set_el(next_x, self.y, self)
+
+   #     if Character
 
 class Character(GameElement):
     IMAGE = "Girl"
@@ -53,17 +70,22 @@ class Character(GameElement):
             next_location = self.next_pos(direction)
             if next_location:
                 next_x = next_location[0]
-                next_y = next_location[1]
+                next_y = next_location[1]  
                 
-                existing_el = self.board.get_el(next_x, next_y)
-                if existing_el:
-                    existing_el.interact(self)
+                if next_x in range(GAME_WIDTH) and next_y in range(GAME_HEIGHT):
+                    
+                    existing_el = self.board.get_el(next_x, next_y)
+                    if existing_el:
+                        existing_el.interact(self)
 
-                if existing_el and existing_el.SOLID:
-                    self.board.draw_msg("There's something in my way!")
-                elif existing_el is None or not existing_el.SOLID:
-                    self.board.del_el(self.x, self.y)
-                    self.board.set_el(next_x, next_y, self)
+                    if existing_el and existing_el.SOLID:
+                        self.board.draw_msg("There's something in my way!")
+                    elif existing_el is None or not existing_el.SOLID:
+                        self.board.del_el(self.x, self.y)
+                        self.board.set_el(next_x, next_y, self) 
+                else:
+                    print "Whoops, don't run away!"
+
 
     def __init__(self):
         GameElement.__init__(self)
@@ -73,10 +95,11 @@ class Character(GameElement):
 #### DO NOT TOUCH ####
 GAME_BOARD = None
 DEBUG = False
+
 ######################
 
-GAME_WIDTH = 5
-GAME_HEIGHT = 5
+GAME_WIDTH = 8
+GAME_HEIGHT = 8
 
 #### Put class definitions here ####
 pass
@@ -86,10 +109,13 @@ def initialize():
     """Put game initialization code here"""
     
     rock_positions = [
-            (2, 1),
-            (1, 2),
-            (3, 2),
-            (2, 3) 
+            (1, 1),
+            (0, 3),
+            (3, 0),
+            (5, 1),
+            (3, 7),
+            (5, 7),
+            (6, 2) 
         ]
 
     rocks = []
@@ -104,17 +130,45 @@ def initialize():
     for rock in rocks:
         print rock
 
-    player = Character()
-    GAME_BOARD.register(player)
-    GAME_BOARD.set_el(4, 4, player)
-    print player
+    cat_positions = [
+            (0,1),
+            (0,2),
+            (1,0),
+            (2,0),
+            (2,2),
+            (0,5),
+            (4,4),
+            (1,3)
+        ]
 
-    GAME_BOARD.draw_msg("This game is wicked awesome.")
+    cats = []
 
-    gem = Gem()
-    GAME_BOARD.register(gem)
-    GAME_BOARD.set_el(3,1, gem)
+    for pos in cat_positions:
+        cat = Cat()
+        GAME_BOARD.register(cat)
+        GAME_BOARD.set_el(pos[0], pos[1], cat)
+        cats.append(cat)
+
+    # cats.SOLID = False
+
+    for cat in cats:
+        print cat
 
     cat = Cat()
     GAME_BOARD.register(cat)
     GAME_BOARD.set_el(2,2,cat)
+
+    player = Character()
+    GAME_BOARD.register(player)
+    GAME_BOARD.set_el(0, 0, player)
+    print player
+
+    star = Star()
+    GAME_BOARD.register(star)
+    GAME_BOARD.set_el(7,7,star)
+
+    badguy = BadGuy()
+    GAME_BOARD.register(badguy)
+    GAME_BOARD.set_el(0,5,badguy)
+
+    GAME_BOARD.draw_msg("Cat's are the best.")

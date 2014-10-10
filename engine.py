@@ -24,6 +24,7 @@ TILE_HEIGHT = 0
 # Setup mapping of images to be used in game
 def setup_images():
     filenames = {
+            "Star": "Star.png",
             "Wall": "Wall Block.png",
             "Block": "Plain Block.png",
             "GrassBlock": "Grass Block.png",
@@ -42,7 +43,7 @@ def setup_images():
             "Heart": "Heart.png",
             "Key": "Key.png",
             "Boy": "Character Boy.png",
-            "Cat": "Character Cat Girl.png",
+            "Cat": "Catsmall.png",
             "Horns": "Character Horn Girl.png",
             "Girl": "Character Pink Girl.png",
             "Princess": "Character Princess Girl.png"
