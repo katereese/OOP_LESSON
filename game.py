@@ -13,9 +13,20 @@ class Star(GameElement):
     SOLID = False
     def interact(self, player):
         if len(player.inventory) >= 5:
-            GAME_BOARD.draw_msg("You lose! You have rescued %d cats and you are a cat hoarder :( You love cats a bit too much!"%(len(player.inventory)))
+            GAME_BOARD.draw_msg("You lose! You have rescued %d cats and you are a cat hoarder :( You might have aquired a few enemy bugs too!"%(len(player.inventory)))
+            for i in range(0, GAME_WIDTH):
+                for j in range(0, GAME_HEIGHT):
+                    lose = Lose()
+                    GAME_BOARD.register(lose)
+                    GAME_BOARD.set_el(i, j, lose)
+
         if len(player.inventory) < 5:
             GAME_BOARD.draw_msg("You won! You have rescued %d cats and you are not a cat hoarder! You must really love cats!"%(len(player.inventory)))
+            for i in range(0, GAME_WIDTH):
+                for j in range(0, GAME_HEIGHT):
+                    win = Win()
+                    GAME_BOARD.register(win)
+                    GAME_BOARD.set_el(i, j, win)
 
 class Cat(GameElement):
     IMAGE = "Cat"
@@ -28,6 +39,9 @@ class Win(GameElement):
     IMAGE = "Heart"
     SOLID = True
 
+class Lose(GameElement):
+    IMAGE = "Bug"
+    SOLID = True
 
 class BadGuy(GameElement):
     IMAGE = "Horns"
@@ -192,11 +206,11 @@ def initialize():
     GAME_BOARD.register(star)
     GAME_BOARD.set_el(8,8,star)
 
-    for i in range(0, GAME_WIDTH):
-        for j in range(0, GAME_HEIGHT):
-            win = Win()
-            GAME_BOARD.register(win)
-            GAME_BOARD.set_el(i, j, win)
+    # for i in range(0, GAME_WIDTH):
+    #     for j in range(0, GAME_HEIGHT):
+    #         win = Win()
+    #         GAME_BOARD.register(win)
+    #         GAME_BOARD.set_el(i, j, win)
 
     # badguy = BadGuy()
     # GAME_BOARD.register(badguy)
