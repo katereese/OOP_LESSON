@@ -13,7 +13,7 @@ class Star(GameElement):
     SOLID = False
     def interact(self, player):
         if len(player.inventory) >= 5:
-            GAME_BOARD.draw_msg("You lose! You have rescued %d cats and you are a cat hoarder :( You might have aquired a few enemy bugs too!"%(len(player.inventory)))
+            GAME_BOARD.draw_msg("You lose! You have rescued %d cats and you are a cat hoarder :( :( You might have aquired a few enemy bugs too!"%(len(player.inventory)))
             for i in range(0, GAME_WIDTH):
                 for j in range(0, GAME_HEIGHT):
                     lose = Lose()
@@ -21,7 +21,7 @@ class Star(GameElement):
                     GAME_BOARD.set_el(i, j, lose)
 
         if len(player.inventory) < 5:
-            GAME_BOARD.draw_msg("You won! You have rescued %d cats and you are not a cat hoarder! You must really love cats!"%(len(player.inventory)))
+            GAME_BOARD.draw_msg("You won! You have rescued %d cats but you are not a cat hoarder! You must really love cats!"%(len(player.inventory)))
             for i in range(0, GAME_WIDTH):
                 for j in range(0, GAME_HEIGHT):
                     win = Win()
